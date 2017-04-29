@@ -1,0 +1,16 @@
+{
+  "name": "cron",
+  "version": "1.0.0",
+  "description": "Cron Job To refresh token from SF",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.15.2",
+    "jsforce": "^1.8.0",
+    "node-cron": "^1.1.3"
+  }
+}
