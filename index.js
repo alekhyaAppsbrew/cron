@@ -21,14 +21,26 @@ var oauth2 = new jsforce.OAuth2({
  
 // Run the cron Job every 15 minutes 
 cron.schedule('15 * * * * *', function(){
-	
-	oauth2.refreshToken(refreshToken).then(function(ret) {
-	  var conn = new jsforce.Connection({
-		 accessToken: ret.access_token,
-		 instanceUrl: ret.instance_url
-	  });
-	  console.log(conn.accessToken+"Acesstoken");
-	});
+	// Verify if the salesforce connection has been established
+	if(typeof refreshToken != 'undefined')
+	{
+		oauth2.refreshToken(refreshToken).then(function(ret) {
+		  var conn = new jsforce.Connection({
+			 accessToken: ret.access_token,
+			 instanceUrl: ret.instance_url
+		  });
+		  console.log(conn.accessToken+"Acesstoken");
+		  
+		  // Query to verify if the acesss token is valid or not
+		  var records = [];
+		  conn.query("SELECT Id, Name FROM Account", function(err, result) 
+		  {
+			  if (err) { return console.error(err); }
+			  console.log("total : " + result.totalSize);
+			  console.log("fetched : " + result.records.length);
+		  });
+		});
+	}	
 });
 
 
@@ -54,7 +66,6 @@ app.get('/callback', function(req, res) {
     console.log(conn.instanceUrl);
     console.log("User ID: " + userInfo.id);
     console.log("Org ID: " + userInfo.organizationId);
-    // ...
   });
 });
 
