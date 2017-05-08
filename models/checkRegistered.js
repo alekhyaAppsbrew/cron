@@ -1,6 +1,7 @@
 
 
-  
+  // Add the Config file
+  var config = require('../config/config.json');
   
   
   /** checkRegistered () is used to check if the instance
@@ -17,7 +18,7 @@
 	   var pg = require('pg');
 		  
 	   // Prepare the connection variables
-	   var conString = process.env.ELEPHANTSQL_URL || "postgres://zzlbzdoi:zfQnIJMTForgzLtojNWFkbVK05iuVpxx@stampy.db.elephantsql.com:5432/zzlbzdoi";
+	   var conString = process.env.ELEPHANTSQL_URL || config.conString;
 	   var client = new pg.Client(conString);
 	   client.connect(function(err) 
 	   {

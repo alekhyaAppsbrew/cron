@@ -10,8 +10,8 @@ var http = require('http');
 var express = require('express')
 var app = express();
 
-// Add the methods require to run 
-var checkRegistered = require('./methods/checkRegistered.js');;
+// Add the models require to run 
+var checkRegistered = require('./models/checkRegistered.js');;
 
 
 var oauth2 = new jsforce.OAuth2({
@@ -52,34 +52,12 @@ if(result== true)
 	});
 }	
 
-
-app.get('/oauth2/auth', function(req, res) {
-  res.redirect(oauth2.getAuthorizationUrl({ scope : 'chatter_api custom_permissions full id openid refresh_token visualforce web offline_access api' }));
-});
-
-
-
-//
-// Pass received authz code and get access token
-//
-app.get('/callback', function(req, res) {
-  var conn = new jsforce.Connection({ oauth2 : oauth2 });
-  var code = req.param('code');
-  conn.authorize(code, function(err, userInfo) {
-    if (err) { return console.error(err); }
-    // Now you can get the access token, refresh token, and instance URL information.
-    // Save them to establish connection next time.
-    console.log(conn.accessToken);
-    console.log(conn.refreshToken);
-	refreshToken=conn.refreshToken;
-    console.log(conn.instanceUrl);
-    console.log("User ID: " + userInfo.id);
-    console.log("Org ID: " + userInfo.organizationId);
-  });
-});
-
 // Create a http server and listen to port-3000
 http.createServer(app).listen(8000, "0.0.0.0", function(){
 	
   console.log('Express server listening on port ' + 8000);
 });
+
+// Set up the routes
+require('./routes/route_handler.js')(app);
+ 
